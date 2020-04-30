@@ -1,0 +1,5 @@
+beautifulsoup4==4.8.0
+Django==3.0.4
+gunicorn==19.7.1
+Jinja2==2.10.3
+pandas==0.25.1
