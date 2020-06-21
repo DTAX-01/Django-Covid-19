@@ -1,0 +1,725 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Monitor Covid-19</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href=" {% static 'covid/images/icon/favicon.ico' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/bootstrap.min.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/font-awesome.min.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/themify-icons.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/metisMenu.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/owl.carousel.min.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/slicknav.min.css' %} ">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css"
+        media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" href=" {% static 'covid/css/typography.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/default-css.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/styles.css' %} ">
+    <link rel="stylesheet" href=" {% static 'covid/css/responsive.css' %} ">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" /> -->
+    <!-- <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css"> -->
+    <!-- modernizr css -->
+    <script src=" {% static 'covid/js/vendor/modernizr-2.8.3.min.js' %} "></script>
+
+    <style>
+        .ui-autocomplete {
+            background-color: #ffffff !important;
+            display: block;
+            width: 300px;
+            box-sizing: border-box;
+            max-height: 200px;
+            overflow-y: scroll;
+        }
+
+        .ui-menu-item-wrapper {
+            padding: 10px;
+            font-family: 'Anton', sans-serif;
+        }
+
+        .ui-menu-item-wrapper:hover {
+            background-color: #adccff;
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!-- preloader area start -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    <!-- preloader area end -->
+    <!-- page container area start -->
+    <div class="page-container">
+        <!-- main content area start -->
+        <div class="main-content">
+            <!-- header area start -->
+            <div class="header-area">
+                <div class="row align-items-center">
+                    <!-- nav and search button -->
+                    <div class="col-md-6 col-sm-8 clearfix">
+                        <img src="{% static 'covid/images/logo.png' %}" alt="" style="width: auto; height: 60px">
+                    </div>
+                    <!-- profile info & task notification -->
+                    <div class="col-md-6 col-sm-4 clearfix">
+                        <ul class="notification-area pull-right">
+                            <li id="full-view"><i class="ti-fullscreen"></i></li>
+                            <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- header area end -->
+
+            <div class="main-content-inner">
+                <!-- sales report area start -->
+                <div class="sales-report-area mt-5 mb-5">
+                    <div class="row mb-5">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="single-report mb-xs-30">
+                                <div class="pl--20 pr--20 pt--30 mb-3">
+                                    <div class="input-group mb-3">
+                                        <select class="form-control select2" name="" id="txtSearch">
+                                            <option value="world" selected>World (Global)</option>
+                                            {% for x in region %}
+                                            <option value="{{x.id}}">
+                                                {{x.country}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <!-- <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button" id="btnSearch"><i
+                                                    class="fa fa-search"></i></button>
+                                        </div> -->
+                                    </div>
+                                    <!-- <div class="alert alert-danger" role="alert">
+                                        <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                                    </div> -->
+                                    <p>Data From: &nbsp;<a style=""
+                                            href="https://www.cdc.gov/coronavirus/2019-ncov/index.html"
+                                            target="_blank">CDC </a>·<a style=""
+                                            href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+                                            target="_blank"> WHO </a> ·<a style=""
+                                            href="https://www.ecdc.europa.eu/en/novel-coronavirus-china"
+                                            target="_blank"> ECDC </a> ·<a style=""
+                                            href="https://en.wikipedia.org/wiki/2019%E2%80%9320_coronavirus_pandemic"
+                                            target="_blank"> Wikipedia</a> ·<a style="" href="https://247wallst.com/"
+                                            style=""
+                                            href="https://bnonews.com/index.php/2020/04/the-latest-coronavirus-cases/"
+                                            target="_blank"> BNO News </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="single-report mb-xs-30">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="icon" style="background-color: white;"><img
+                                            src="{% static 'covid/images/sad1.png' %}" alt=""
+                                            style="width: auto; height: 50px; margin-left: 50px;"></div>
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Confirmed</h4>
+                                        <p id="tgl1"></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2 id="total1"></h2>
+                                        <span id="kenaikan1"></span>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales1" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="single-report mb-xs-30">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="icon" style="background-color: white;"><img
+                                            src="{% static 'covid/images/happy.png' %}" alt=""
+                                            style="width: auto; height: 50px; margin-left: 50px;"></div>
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Recovered</h4>
+                                        <p id="tgl2"></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2 id="total2"></h2>
+                                        <span id="kenaikan2"></span>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales2" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="single-report">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="icon" style="background-color: white;"><img
+                                            src="{% static 'covid/images/sad.png' %}" alt=""
+                                            style="width: auto; height: 50px; margin-left: 50px;"></div>
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Death</h4>
+                                        <p id="tgl3"></p>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2 id="total3"></h2>
+                                        <span id="kenaikan3"></span>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales3" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sales report area end -->
+
+                <!-- overview area start -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="header-title mb-0">Overview <span class="whatCountry"> ""</span>
+                                    </h4>
+                                    <select id="changeChart" class="custome-select border-0 pr-3">
+                                        <option selected value="10">Last 10 Days</option>
+                                        <option value="14">Last 14 Days</option>
+                                        <option value="21">Last 21 Days</option>
+                                        <option value="1">Last 1 Month</option>
+                                        <option value="2">Last 2 Month</option>
+                                        <option value="0">All</option>
+                                    </select>
+                                </div>
+                                <div id="container-verview">
+                                    <canvas id="verview-shart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- overview area end -->
+                <!-- market value area start -->
+                <div class="row mt-5 mb-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-sm-flex justify-content-between align-items-center">
+                                    <h4 class="header-title mb-0">Detail <span class="whatCountry"> ""</span></h4>
+                                    <!-- <select class="custome-select border-0 pr-3">
+                                        <option selected>Last 24 Hours</option>
+                                        <option value="0">01 July 2018</option>
+                                    </select> -->
+                                </div>
+                                <div class="market-status-table mt-4">
+                                    <!-- <div class="table-responsive"> -->
+                                    <table id="tblDetail" class="table table-bordered">
+                                        <thead>
+                                            <th>No</th>
+                                            <th>Region/City</th>
+                                            <th>Confirmed</th>
+                                            <th>Recovered</th>
+                                            <th>Deaths</th>
+                                            <th>Lat</th>
+                                            <th>Long</th>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- market value area end -->
+                <!-- row area start -->
+                <div class="row">
+
+                </div>
+
+                <!-- row area end -->
+                <div class="row mt-5">
+                    <!-- latest news area start -->
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Latest News</h4>
+                                <div class="letest-news mt-5" id="latestnews">
+                                    
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- latest news area end -->
+                    <!-- latest VIDEOS area start -->
+                    <div class="col-xl-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="header-title">Latest Videos</h4>
+                                <div class="letest-news mt-5" id="latestvideos">
+                                    <!-- <div class="single-post mb-xs-40 mb-sm-40">
+                                        <div class="lts-thumb">
+                                            <img src=" {% static 'covid/images/blog/post-thumb1.jpg' %} "
+                                                alt="post thumb">
+                                        </div>
+                                        <div class="lts-content">
+                                            <span>Admin Post</span>
+                                            <h2><a href=" {% static 'blog.html' %} ">Sed ut perspiciatis unde omnis
+                                                    iste.</a></h2>
+                                            <p>There are many variations of passages of Lorem Ipsum available, but the
+                                                majority have suffered alteration in some...</p>
+                                        </div>
+                                    </div>
+                                    <div class="single-post">
+                                        <div class="lts-thumb">
+                                            <img src=" {% static 'covid/images/blog/post-thumb2.jpg' %} "
+                                                alt="post thumb">
+                                        </div>
+                                        <div class="lts-content">
+                                            <span>Admin Post</span>
+                                            <h2><a href=" {% static 'blog.html' %} ">Sed ut perspiciatis unde omnis
+                                                    iste.</a></h2>
+                                            <p>There are many variations of passages of Lorem Ipsum available, but the
+                                                majority have suffered alteration in some...</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- latest news area end -->
+                </div>
+                <!-- row area start-->
+            </div>
+        </div>
+        <!-- main content area end -->
+        <!-- footer area start-->
+        <footer>
+            <div class="footer-area">
+                <p>© Copyright <a target="_blank" href="https://github.com/DTAX-01">DTAX-01</a> 2020. All right reserved.
+                </p>
+            </div>
+        </footer>
+        <!-- footer area end-->
+    </div>
+    <!-- page container area end -->
+    <!-- jquery latest version -->
+    <script src=" {% static 'covid/js/vendor/jquery-2.2.4.min.js' %} "></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <!-- bootstrap 4 js -->
+    <script src=" {% static 'covid/js/popper.min.js' %} "></script>
+    <script src=" {% static 'covid/js/bootstrap.min.js' %} "></script>
+    <script src=" {% static 'covid/js/owl.carousel.min.js' %} "></script>
+    <script src=" {% static 'covid/js/metisMenu.min.js' %} "></script>
+    <script src=" {% static 'covid/js/jquery.slimscroll.min.js' %} "></script>
+    <script src=" {% static 'covid/js/jquery.slicknav.min.js' %} "></script>
+
+    <!-- start chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script> -->
+    <!-- start highcharts js -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+    <!-- start zingchart js -->
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script>
+        zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+        ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
+    </script>
+    <!-- all line chart activation -->
+    <!-- <script src=" {% static 'covid/js/line-chart.js' %} "></script> -->
+    <!-- all pie chart -->
+    <script src=" {% static 'covid/js/pie-chart.js' %} "></script>
+    <!-- others plugins -->
+    <script src=" {% static 'covid/js/plugins.js' %} "></script>
+    <script src=" {% static 'covid/js/scripts.js' %} "></script>
+
+    <script>
+        var dtChart = null
+        var kete = 1
+        var bnyk = 10
+        var mychart = null
+        var mychart01 = null
+        var mychart02 = null
+        var mychart03 = null
+        $('#txtSearch').select2({
+            placeholder: "Type Search Region",
+            width: "100%"
+        });
+        $(document).ready(function () {
+            var tgl = [], confirm = [], recover = [], death = [];
+            $("#txtSearch").on("change", function () {
+                var txt = $("#txtSearch option:selected").text()
+                var key = $("#txtSearch").val()
+                $(".whatCountry").text(` ${txt}`)
+                // var patt = /\w+?\)/
+                // key = key.match(patt)[0].replace(")", "")
+                // console.log(key)
+                $.get("api/getpastdata/" + key).done(function (data) {
+                    dtChart = data
+                    dtChart["data"].map(function (v, k) {
+                        tgl.push(v["date"])
+                        confirm.push(v["confirmed"])
+                        recover.push(v["recovered"])
+                        death.push(v["fatal"])
+                    })
+                    buildChart(bnyk, kete)
+                    buildChart0("coin_sales1", 1, kete)
+                    buildChart0("coin_sales2", 2, kete)
+                    buildChart0("coin_sales3", 3, kete)
+                    kete = 0
+                })
+                $.get("api/" + key).done(function (data) {
+                    if ($.fn.DataTable.isDataTable('#tblDetail')) {
+                        $("#tblDetail").DataTable().destroy();
+                    }
+                    $("#tblDetail tbody").empty()
+                    var trtd = ''
+                    data["areas"].map(function (v, k) {
+                        trtd += `
+                    <tr>
+                        <td>${k + 1}</td>
+                        <td>${v["displayName"]}</td>
+                        <td>${v["totalConfirmed"]}</td>
+                        <td>${v["totalRecovered"]}</td>
+                        <td>${v["totalDeaths"]}</td>
+                        <td>${v["lat"]}</td>
+                        <td>${v["long"]}</td>
+                    </tr>
+                `
+                    })
+                    $("#tblDetail tbody").append(trtd)
+                    $("#tblDetail").DataTable({ responsive: true })
+                })
+                $.get("api/newsvideos/"+txt).done(function(data){
+                    var news = data["news"]
+                    var video = data["videos"]
+                    var isi = ''
+                    $("#latestnews").html("")
+                    $("#latestvideos").html("")
+                    for(var i = 0; i < 20; i++){
+                        if(i == 8) break
+                        var v = news[i]
+                        if(!v.hasOwnProperty("image")) continue;
+                        var urlimg = v["image"]["thumbnail"]["contentUrl"]
+                        var height = v["image"]["thumbnail"]["height"]
+                        var width = v["image"]["thumbnail"]["width"]
+                        var prov = v["provider"][0]["name"]
+                        var url = v["url"]
+                        var name = v["name"]
+                        var desc = v["description"]
+                        var tgl = v["datePublished"].split(":")[0].split("T")[0]
+                        var jam = v["datePublished"].split("T")[1].split(".")[0].split(":")
+                        isi += `
+                                    <div class="single-post mb-xs-40 mb-sm-40">
+                                        <div class="lts-thumb">
+                                            <img src="${urlimg}"
+                                                alt="post thumb" height="${height}" width="${width}">
+                                        </div>
+                                        <div class="lts-content">
+                                            <span>${prov}</span>
+                                            <h2><a target="_blank" href="${url}">${cutTxt(name, 70)}</a></h2>
+                                            <p>${cutTxt(desc)}</p>
+                                            <span>${tgl} | ${jam[0]}:${jam[1]}</span>
+                                        </div>
+                                    </div>
+                    `  
+                    }
+                    $("#latestnews").html(isi)
+                    isi = ''
+                    for(var i = 0; i < 20; i++){
+                        if(i == 8) break
+                        var v = video[i]
+                        if(!v.hasOwnProperty("thumbnailUrl") || !v.hasOwnProperty("publisher") || !v.hasOwnProperty("creator") || !v.hasOwnProperty("name")) continue;
+                        var urlimg = v["thumbnailUrl"]
+                        var prov = v["creator"]["name"]
+                        var url = v["contentUrl"]
+                        var name = v["name"]
+                        var desc = v["description"]
+                        var tgl = v["datePublished"].split(":")[0].split("T")[0]
+                        var jam = v["datePublished"].split("T")[1].split(".")[0].split(":")
+                        isi += `
+                                    <div class="single-post mb-xs-40 mb-sm-40">
+                                        <div class="lts-thumb">
+                                            <img src="${urlimg}"
+                                                alt="post thumb">
+                                        </div>
+                                        <div class="lts-content">
+                                            <span>${prov}</span>
+                                            <h2><a target="_blank" href="${url}">${cutTxt(name, 70)}</a></h2>
+                                            <p>${cutTxt(desc)}</p>
+                                            <span>${tgl} | ${jam[0]}:${jam[1]}</span>
+                                        </div>
+                                    </div>
+                    `  
+                    }
+                    $("#latestvideos").html(isi)
+                })
+            })
+
+            function transparentTize(color, opacity) {
+                var alpha = opacity === undefined ? 0.5 : 1 - opacity;
+                return Color(color).alpha(alpha).rgbString();
+            }
+            function cutTxt(str, n=100){
+              return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
+            };
+            function buildChart0(kemana, apa = 1, ktr = false) {
+                var chartColors = {
+                    red: 'rgb(255, 99, 132)',
+                    orange: 'rgb(255, 159, 64)',
+                    yellow: 'rgb(255, 205, 86)',
+                    green: 'rgb(75, 192, 192)',
+                    blue: 'rgb(54, 162, 235)',
+                    purple: 'rgb(153, 102, 255)',
+                    grey: 'rgb(201, 203, 207)'
+                };
+                var dt = null
+                var bg = ''
+                var clr = ''
+                var batas = 10
+                var ket = ""
+                if (apa == 1) {
+                    dt = confirm.slice(-batas);
+                    clr = chartColors.orange;
+                    bg = transparentTize(chartColors.orange);
+                    ket = "confirmed"
+                }
+                if (apa == 2) {
+                    dt = recover.slice(-batas)
+                    clr = chartColors.purple;
+                    bg = transparentTize(chartColors.purple);
+                    ket = "recovered"
+                }
+                if (apa == 3) {
+                    dt = death.slice(-batas)
+                    clr = chartColors.red;
+                    bg = transparentTize(chartColors.red);
+                    ket = "fatal"
+                }
+                var dtlast = dtChart["data"][dtChart["data"].length - 1]
+                var dtBeforeLast = dtChart["data"][dtChart["data"].length - 2]
+                var operasi = dtlast[ket] - dtBeforeLast[ket]
+                var tanda = (operasi < 0) ? "- " : "+ "
+                var time = dtlast["date"].split("T")
+                //console.log(dtlast)
+                $("#total" + apa).text(Number((dtlast[ket]).toFixed(1)).toLocaleString())
+                $("#kenaikan" + apa).text(tanda + operasi)
+                $("#tgl" + apa).text(`${time[0]} | ${time[1].split(".")[0]}`)
+
+                var ctx = document.getElementById(kemana).getContext('2d');
+                var config = {
+                    // The type of chart we want to create
+                    type: 'line',
+                    // The data for our dataset
+                    data: {
+                        labels: tgl.slice(-batas),
+                        datasets: [{
+                            label: "Confirmed",
+                            backgroundColor: bg,
+                            borderColor: clr,
+                            data: dt,
+                        }]
+                    },
+                    // Configuration options go here
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        animation: {
+                            easing: "easeInOutBack"
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        scales: {
+                            yAxes: [{
+                                display: !1,
+                                ticks: {
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold",
+                                    beginAtZero: !0,
+                                    maxTicksLimit: 5,
+                                    padding: 0
+                                },
+                                gridLines: {
+                                    drawTicks: !1,
+                                    display: !1
+                                }
+                            }],
+                            xAxes: [{
+                                display: !1,
+                                gridLines: {
+                                    zeroLineColor: "transparent"
+                                },
+                                ticks: {
+                                    padding: 0,
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold"
+                                }
+                            }]
+                        }
+                    }
+                }
+                if (ktr) {
+                    if (apa == 1) mychart01 = new Chart(ctx, config);
+                    if (apa == 2) mychart02 = new Chart(ctx, config);
+                    if (apa == 3) mychart03 = new Chart(ctx, config);
+                } else {
+                    if (apa == 1) {
+                        mychart01.destroy()
+                        mychart01 = new Chart(ctx, config)
+                    }
+                    if (apa == 2) {
+                        mychart02.destroy()
+                        mychart02 = new Chart(ctx, config)
+                    }
+                    if (apa == 3) {
+                        mychart03.destroy()
+                        mychart03 = new Chart(ctx, config)
+                    }
+
+                }
+            }
+
+            function buildChart(batas = 14, ket = false) {
+                var tgl = [], confirm = [], recover = [], death = [];
+                dtChart["data"].map(function (v, k) {
+                    tgl.push(v["date"])
+                    confirm.push(v["confirmed"])
+                    recover.push(v["recovered"])
+                    death.push(v["fatal"])
+                })
+                var bts = false
+                if (batas > 30 || batas == 0) bts = true
+
+                var config = {
+                    type: 'line',
+
+                    data: {
+                        labels: tgl.slice(-batas),
+                        datasets: [{
+                            label: 'Confirmed',
+                            backgroundColor: 'rgb(255, 159, 64)',
+                            borderColor: 'rgb(255, 159, 64)',
+                            data: confirm.slice(-batas),
+                            fill: false,
+                        }, {
+                            label: 'Recovered',
+                            fill: false,
+                            backgroundColor: 'rgb(54, 162, 235)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            data: recover.slice(-batas),
+                        },
+                        {
+                            label: 'Deaths',
+                            fill: false,
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: death.slice(-batas),
+                            borderDash: [5, 5],
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        animation: {
+                            easing: "easeInOutBack"
+                        },
+                        title: {
+                            display: false,
+                            text: 'Overview'
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                scaleLabel: {
+                                    display: false,
+                                    labelString: 'Month'
+                                },
+                                ticks: {
+                                    autoSkip: bts
+                                }
+                            }],
+                            yAxes: [{
+                                display: true,
+                                scaleLabel: {
+                                    display: false,
+                                    labelString: 'Value'
+                                },
+                                ticks: {
+
+                                    // forces step size to be 5 units
+                                    //stepSize: 500
+                                }
+                            }]
+                        }
+                    }
+                };
+                var ctx = document.getElementById('verview-shart').getContext('2d');
+                if (ket) {
+                    mychart = new Chart(ctx, config);
+                } else {
+                    mychart.destroy()
+                    mychart = new Chart(ctx, config)
+                }
+
+            }
+
+            /*--------------  overview-chart END ------------*/
+
+            $("#changeChart").on("change", function () {
+                switch ($(this).val()) {
+                    case "7":
+                        bnyk = 10
+                        break
+                    case "14":
+                        bnyk = 14
+                        break
+                    case "21":
+                        bnyk = 21
+                        break
+                    case "1":
+                        bnyk = 30
+                        break
+                    case "2":
+                        bnyk = 60
+                        break
+                    case "0":
+                        buildChart(0)
+                        break
+                }
+                buildChart(bnyk)
+            })
+        })
+    </script>
+</body>
+
+</html>
